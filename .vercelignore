@@ -1,0 +1,9 @@
+# Exclude large local video assets from Vercel deployment
+public/uploads/*.mp4
+public/uploads/**/*.mp4
+public/uploads/
+videos/
+*.pt
+yolov8n.pt
+.next/
+node_modules/
