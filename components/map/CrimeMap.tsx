@@ -1,0 +1,1 @@
+'use client';import dynamic from 'next/dynamic';const Inner=dynamic(()=>import('./CrimeMapInner'),{ssr:false,loading:()=> <div className='h-[520px] rounded-2xl bg-slate-900'/>});export default function CrimeMap(props:any){return <Inner {...props}/>}

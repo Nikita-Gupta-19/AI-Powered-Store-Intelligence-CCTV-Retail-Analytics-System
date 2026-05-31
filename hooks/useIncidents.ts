@@ -1,0 +1,1 @@
+'use client';import { useQuery } from '@tanstack/react-query';import { incidentsService } from '@/services/incidents.service';export const useIncidents=()=>useQuery({queryKey:['incidents'],queryFn:incidentsService.list});export const useIncident=(id:string)=>useQuery({queryKey:['incident',id],queryFn:()=>incidentsService.get(id),enabled:!!id});

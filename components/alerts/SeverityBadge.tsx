@@ -1,0 +1,1 @@
+import { Badge } from '@/components/ui/badge';export default function SeverityBadge({severity}:any){return <Badge variant={severity==='CRITICAL'?'danger':severity==='LOW'?'success':'warning'}>{severity}</Badge>}

@@ -1,0 +1,1 @@
+import TimelineEvent from './TimelineEvent';export default function Timeline({events=[]}:any){return <div className='space-y-5 border-l border-blue-500/30 pl-5'>{events.map((e:any)=><TimelineEvent key={e.id} event={e}/>)}</div>}

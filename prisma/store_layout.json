@@ -1,0 +1,61 @@
+{
+  "store_name": "Brigade Road Bangalore",
+  "excel_source": "Brigade Road - Store layoutc5f5d56.xlsx",
+  "layout_revision": "Current",
+  "raw_grid_markers": [
+    {
+      "row": 2,
+      "data": {
+        "Unnamed: 13": "Revised"
+      }
+    },
+    {
+      "row": 21,
+      "data": {
+        "Unnamed: 13": "Current"
+      }
+    }
+  ],
+  "departments": [
+    {
+      "name": "Aisle 1 - Makeup & Cosmetics",
+      "lat": 28.618,
+      "lng": 77.212,
+      "section": "North Wing",
+      "optimal_dwell": 35,
+      "excel_row_ref": 2
+    },
+    {
+      "name": "Aisle 2 - Skincare & Dermatologicals",
+      "lat": 28.615,
+      "lng": 77.21,
+      "section": "East Wing",
+      "optimal_dwell": 40,
+      "excel_row_ref": 8
+    },
+    {
+      "name": "Aisle 3 - Luxury Fragrances",
+      "lat": 28.616,
+      "lng": 77.208,
+      "section": "West Wing",
+      "optimal_dwell": 25,
+      "excel_row_ref": 14
+    },
+    {
+      "name": "Aisle 4 - Bath, Body & Haircare",
+      "lat": 28.621,
+      "lng": 77.205,
+      "section": "South-East Wing",
+      "optimal_dwell": 30,
+      "excel_row_ref": 20
+    },
+    {
+      "name": "POS Register checkout counters",
+      "lat": 28.608,
+      "lng": 77.202,
+      "section": "Front South Wing",
+      "optimal_dwell": 50,
+      "excel_row_ref": 21
+    }
+  ]
+}

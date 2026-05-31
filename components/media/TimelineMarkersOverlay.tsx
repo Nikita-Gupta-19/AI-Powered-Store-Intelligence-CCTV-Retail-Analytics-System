@@ -1,0 +1,1 @@
+export default function TimelineMarkersOverlay({events=[]}:any){return <div className='mt-2 flex gap-2'>{events.map((e:any)=><span key={e.id} className='rounded bg-blue-500/20 px-2 py-1 text-xs'>{e.time}</span>)}</div>}

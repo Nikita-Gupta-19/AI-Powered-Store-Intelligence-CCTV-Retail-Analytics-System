@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    container_name: store-ai-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - public-data:/app/public
+    environment:
+      - PORT=8001
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: store-intelligence-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - public-data:/app/public
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - AI_SERVICE_URL=http://ai-service:8001
+      - JWT_SECRET=challenge-this-in-production-retail-key
+      - PORT=3000
+    depends_on:
+      - ai-service
+    restart: always
+
+volumes:
+  public-data:

@@ -1,0 +1,1 @@
+import './globals.css';import { QueryProvider } from '@/hooks/useApi';export const metadata={title:'AI Smart Policing Delhi NCR',description:'Incident intelligence platform'};export default function RootLayout({children}:{children:React.ReactNode}){return <html lang='en' className='dark'><body><QueryProvider>{children}</QueryProvider></body></html>}

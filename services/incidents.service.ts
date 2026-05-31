@@ -1,0 +1,1 @@
+import { api } from './http';import type { Incident } from '@/types';export const incidentsService={list:()=>api<Incident[]>('/api/incidents'),get:(id:string)=>api<Incident>(`/api/incidents/${id}`),update:(id:string,body:any)=>api(`/api/incidents/${id}`,{method:'PATCH',body:JSON.stringify(body)})};

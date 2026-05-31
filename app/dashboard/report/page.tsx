@@ -1,0 +1,1 @@
+import CitizenLayout from '@/components/layout/CitizenLayout';import { Card } from '@/components/ui/card';import ComplaintForm from '@/components/forms/ComplaintForm';export default function Report(){return <CitizenLayout><h1 className='mb-5 text-3xl font-bold'>Submit Complaint</h1><Card><ComplaintForm/></Card></CitizenLayout>}

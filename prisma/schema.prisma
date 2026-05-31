@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CITIZEN
+  POLICE
+  ADMIN
+}
+
+enum ComplaintStatus {
+  SUBMITTED
+  REVIEWING
+  UNDER_INVESTIGATION
+  RESOLVED
+  REJECTED
+}
+
+enum InvestigationStatus {
+  PENDING
+  UNDER_INVESTIGATION
+  RESOLVED
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentCategory {
+  FOOTFALL_ENTRY
+  SHELF_INTERACTION
+  QUEUE_WAIT
+  POS_CHECKOUT
+  ANOMALY_SPILL
+  ANOMALY_THEFT
+}
+
+model User {
+  id           String      @id @default(cuid())
+  name         String
+  email        String      @unique
+  passwordHash String
+  role         Role        @default(CITIZEN)
+  complaints   Complaint[]
+  createdAt    DateTime    @default(now())
+}
+
+model Location {
+  id         String      @id @default(cuid())
+  name       String
+  district   String
+  lat        Float
+  lng        Float
+  riskScore  Int
+  incidents  Incident[]
+  complaints Complaint[]
+  alerts     Alert[]
+}
+
+model Complaint {
+  id          String          @id @default(cuid())
+  title       String
+  description String
+  category    IncidentCategory
+  status      ComplaintStatus @default(SUBMITTED)
+  lat         Float
+  lng         Float
+  address     String          @default("")
+  landmark    String          @default("")
+  mediaUrls   String          @default("[]")
+  userId      String?
+  user        User?           @relation(fields: [userId], references: [id])
+  locationId  String?
+  location    Location?       @relation(fields: [locationId], references: [id])
+  incident    Incident?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model Incident {
+  id               String              @id @default(cuid())
+  title            String
+  description      String
+  category         IncidentCategory
+  status           InvestigationStatus @default(PENDING)
+  severity         Severity            @default(MEDIUM)
+  lat              Float
+  lng              Float
+  mediaUrls        String              @default("[]")
+  aiSummary        String?
+  progressNote     String?
+  dwellTimeSeconds Float?              @default(0.0)
+  isStaff          Boolean?            @default(false)
+  hasPurchased     Boolean?            @default(false)
+  customerCount    Int?                @default(1)
+  locationId       String?
+  location         Location?           @relation(fields: [locationId], references: [id])
+  complaintId      String?             @unique
+  complaint        Complaint?          @relation(fields: [complaintId], references: [id])
+  detections       VehicleDetection[]
+  timeline         TimelineEvent[]
+  alerts           Alert[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  notes            IncidentNote[]
+}
+
+model IncidentNote {
+  id           String   @id @default(cuid())
+  content      String
+  authorName   String
+  createdAt    DateTime @default(now())
+  incidentId   String
+  incident     Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}
+
+
+model VehicleDetection {
+  id           String   @id @default(cuid())
+  timestamp    String
+  vehicleType  String
+  licensePlate String?
+  confidence   Float
+  incidentId   String
+  incident     Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}
+
+model TimelineEvent {
+  id         String   @id @default(cuid())
+  time       String
+  label      String
+  confidence Float
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}
+
+model Alert {
+  id           String           @id @default(cuid())
+  title        String
+  incidentType IncidentCategory
+  locationName String
+  severity     Severity
+  message      String
+  timestamp    DateTime         @default(now())
+  lat          Float
+  lng          Float
+  incidentId   String?
+  incident     Incident?        @relation(fields: [incidentId], references: [id])
+  locationId   String?
+  location     Location?        @relation(fields: [locationId], references: [id])
+}

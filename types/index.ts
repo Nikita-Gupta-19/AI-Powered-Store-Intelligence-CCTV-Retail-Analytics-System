@@ -1,0 +1,5 @@
+export type Role='CITIZEN'|'POLICE'|'ADMIN';export type Category='ROAD_RAGE'|'HIT_AND_RUN'|'THEFT'|'RASH_DRIVING'|'SUSPICIOUS_ACTIVITY';export type Severity='LOW'|'MEDIUM'|'HIGH'|'CRITICAL';
+export type Incident={id:string;title:string;description:string;category:Category;status:string;severity:Severity;lat:number;lng:number;mediaUrls:string;aiSummary?:string;createdAt:string;location?:{name:string};detections?:VehicleDetection[];timeline?:TimelineEvent[]};
+export type Alert={id:string;title:string;incidentType:Category;locationName:string;severity:Severity;message:string;timestamp:string;lat:number;lng:number};
+export type Complaint={id:string;title:string;description:string;category:Category;status:string;lat:number;lng:number;mediaUrls:string;createdAt:string};
+export type VehicleDetection={id:string;timestamp:string;vehicleType:string;licensePlate?:string;confidence:number};export type TimelineEvent={id:string;time:string;label:string;confidence:number};export type Location={id:string;name:string;district:string;lat:number;lng:number;riskScore:number};

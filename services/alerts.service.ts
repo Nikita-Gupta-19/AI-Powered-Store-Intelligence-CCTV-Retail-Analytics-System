@@ -1,0 +1,1 @@
+import { api } from './http';import type { Alert } from '@/types';export const alertsService={list:()=>api<Alert[]>('/api/alerts'),create:(body:any)=>api('/api/alerts',{method:'POST',body:JSON.stringify(body)})};

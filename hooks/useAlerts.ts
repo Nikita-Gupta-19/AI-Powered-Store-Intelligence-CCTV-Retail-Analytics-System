@@ -1,0 +1,1 @@
+'use client';import { useQuery } from '@tanstack/react-query';import { alertsService } from '@/services/alerts.service';export const useAlerts=()=>useQuery({queryKey:['alerts'],queryFn:alertsService.list});

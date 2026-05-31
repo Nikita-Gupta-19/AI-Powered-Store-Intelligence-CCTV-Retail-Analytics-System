@@ -1,0 +1,1 @@
+import { api } from './http';export const authService={login:(body:any)=>api('/api/auth/login',{method:'POST',body:JSON.stringify(body)}),register:(body:any)=>api('/api/auth/register',{method:'POST',body:JSON.stringify(body)}),me:()=>api('/api/auth/me')};

@@ -1,0 +1,1 @@
+import { getSession } from '@/lib/auth';import { ok,fail } from '@/lib/api-response';export async function GET(){const session=await getSession();return session?ok(session):fail('Not authenticated',401)}

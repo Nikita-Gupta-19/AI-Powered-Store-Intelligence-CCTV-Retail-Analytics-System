@@ -1,0 +1,1 @@
+'use client';import { useQuery } from '@tanstack/react-query';import { complaintsService } from '@/services/complaints.service';export const useComplaints=()=>useQuery({queryKey:['complaints'],queryFn:complaintsService.list});

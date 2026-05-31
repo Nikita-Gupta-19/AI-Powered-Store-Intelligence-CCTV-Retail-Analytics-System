@@ -1,0 +1,1 @@
+'use client';import { useQuery } from '@tanstack/react-query';import { locationsService } from '@/services/locations.service';export const useLocations=()=>useQuery({queryKey:['locations'],queryFn:locationsService.list});export const useLocation=(id:string)=>useQuery({queryKey:['location',id],queryFn:()=>locationsService.get(id),enabled:!!id});

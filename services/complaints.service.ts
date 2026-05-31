@@ -1,0 +1,1 @@
+import { api } from './http';import type { Complaint } from '@/types';export const complaintsService={list:()=>api<Complaint[]>('/api/complaints'),create:(body:any)=>api('/api/complaints',{method:'POST',body:JSON.stringify(body)})};

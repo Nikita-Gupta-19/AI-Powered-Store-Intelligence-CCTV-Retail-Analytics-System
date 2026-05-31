@@ -1,0 +1,26 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+# Install openssl for Prisma binary compatibility
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps
+
+COPY . .
+
+# Generate the Prisma client and build the Next.js app
+RUN npx prisma generate
+RUN npm run build
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV DATABASE_URL="file:./prisma/dev.db"
+ENV AI_SERVICE_URL="http://ai-service:8001"
+ENV JWT_SECRET="challenge-this-in-production-retail-key"
+
+# Ensure the database is automatically migrated and seeded on startup
+CMD ["sh", "-c", "npx prisma db push && npx prisma db seed && npm run start"]

@@ -1,0 +1,1 @@
+import { Card, CardTitle } from '@/components/ui/card';import VehicleDetectionTable from './VehicleDetectionTable';export default function VehicleDetectionPanel({detections}:any){return <Card><CardTitle>Vehicle Detection Panel</CardTitle><div className='mt-4'><VehicleDetectionTable data={detections}/></div></Card>}

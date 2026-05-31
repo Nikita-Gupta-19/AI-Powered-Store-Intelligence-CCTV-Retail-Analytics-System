@@ -1,0 +1,1 @@
+import { prisma } from '@/lib/prisma';import { ok,fail } from '@/lib/api-response';export async function GET(_:Request,{params}:{params:{id:string}}){const loc=await prisma.location.findUnique({where:{id:params.id},include:{incidents:true,alerts:true,complaints:true}});return loc?ok(loc):fail('Location not found',404)}
