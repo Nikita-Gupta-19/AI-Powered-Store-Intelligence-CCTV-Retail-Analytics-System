@@ -194,16 +194,14 @@ export async function POST(req: Request) {
     },
   });
 
-  // Patch address & landmark via raw SQL (works even if Prisma client is stale)
+  // Patch address & landmark using standard Prisma update (database-agnostic)
   const address = parsed.data.address ?? '';
   const landmark = parsed.data.landmark ?? '';
   if (address || landmark) {
-    await prisma.$executeRawUnsafe(
-      `UPDATE "Complaint" SET "address" = ?, "landmark" = ? WHERE "id" = ?`,
-      address,
-      landmark,
-      complaint.id
-    );
+    await prisma.complaint.update({
+      where: { id: complaint.id },
+      data: { address, landmark },
+    });
   }
 
   // Run AI analysis
