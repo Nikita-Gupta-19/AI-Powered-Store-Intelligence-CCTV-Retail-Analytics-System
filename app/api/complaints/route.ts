@@ -37,21 +37,21 @@ type AIResult = {
 
 // Fallback when Python AI service is unreachable
 function fallbackAI(category: string): AIResult {
-  const severity: Severity = category === 'THEFT' || category === 'HIT_AND_RUN' ? 'HIGH' : 'MEDIUM';
+  const severity: Severity = category === 'ANOMALY_THEFT' ? 'HIGH' : 'MEDIUM';
   return {
     summary:
-      'AI service was not reachable — fallback severity assigned based on incident category. Start the Python AI service for YOLO + dataset-based crash severity analysis.',
+      'AI retail service was not reachable — fallback severity assigned based on retail category. Start the Python FastAPI AI service for YOLOv8 retail object tracking and queue wait-time analysis.',
     vehicles: [],
     timeline: [
-      { time: 'N/A', label: `Category-based classifier flagged possible ${category.replace(/_/g, ' ')} activity`, confidence: 0.62 },
+      { time: 'N/A', label: `Category-based retail classifier flagged possible ${category.replace(/_/g, ' ')} activity`, confidence: 0.62 },
     ],
     incidentAnalysis: {
-      incidentDetected: true, // User explicitly filed this — treat as detected
+      incidentDetected: true,
       incidentType: category,
       severity,
       timestamp: 'N/A',
       confidence: 0.62,
-      reason: 'Python AI service was unreachable. Severity estimated from incident category.',
+      reason: 'Python AI service was unreachable. Severity estimated from store category.',
       source: 'nextjs_category_fallback',
     },
   };
@@ -59,13 +59,13 @@ function fallbackAI(category: string): AIResult {
 
 // When no media is uploaded
 function noMediaAI(category: string): AIResult {
-  const severity: Severity = category === 'THEFT' || category === 'HIT_AND_RUN' ? 'HIGH' : 'MEDIUM';
+  const severity: Severity = category === 'ANOMALY_THEFT' ? 'HIGH' : 'MEDIUM';
   return {
-    summary: 'No media was provided for AI analysis. Severity estimated based on incident category.',
+    summary: 'No media was provided for AI analysis. Severity estimated based on store category.',
     vehicles: [],
     timeline: [],
     incidentAnalysis: {
-      incidentDetected: true, // User filed it — treat as real
+      incidentDetected: true,
       incidentType: category,
       severity,
       timestamp: 'N/A',
@@ -86,7 +86,10 @@ async function runAIAnalysis(mediaUrls: string[], category: string): Promise<AIR
   if (!mediaUrls.length) return noMediaAI(category);
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 seconds
+  // Vercel serverless has a strict 10s execution limit. Abort at 4.5s to trigger fallback gracefully.
+  const isVercel = process.env.VERCEL === '1';
+  const timeoutLimit = isVercel ? 4500 : 120000;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutLimit);
 
   try {
     console.log('[AI] Starting analysis for:', mediaUrls);
