@@ -1,5 +1,7 @@
 # AI-Powered Smart Policing & Incident Intelligence Platform
 
+Live Demo : https://cctv-retail-analytics-system.vercel.app/
+
 Full-stack Next.js + Prisma + Python FastAPI project with:
 
 - Citizen complaint reporting
