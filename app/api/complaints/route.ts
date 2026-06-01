@@ -86,9 +86,9 @@ async function runAIAnalysis(mediaUrls: string[], category: string): Promise<AIR
   if (!mediaUrls.length) return noMediaAI(category);
 
   const controller = new AbortController();
-  // Vercel serverless has a strict 10s execution limit. Abort at 4.5s to trigger fallback gracefully.
+  // Vercel serverless has a strict 10s execution limit. Abort at 4.2s to trigger fallback gracefully and prevent EROFS/timeout issues.
   const isVercel = process.env.VERCEL === '1';
-  const timeoutLimit = isVercel ? 4500 : 120000;
+  const timeoutLimit = isVercel ? 4200 : 120000;
   const timeoutId = setTimeout(() => controller.abort(), timeoutLimit);
 
   try {
