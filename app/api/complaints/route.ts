@@ -77,6 +77,9 @@ function noMediaAI(category: string): AIResult {
 }
 
 function publicUrlToLocalPath(url: string) {
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
   const clean = url.startsWith('/') ? url.slice(1) : url;
   return path.join(process.cwd(), 'public', clean);
 }

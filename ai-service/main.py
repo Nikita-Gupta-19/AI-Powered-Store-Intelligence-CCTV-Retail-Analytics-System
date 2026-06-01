@@ -1,12 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 import cv2
 import numpy as np
 import re
+import os
+import time
 
 app = FastAPI(title="AI Store Intelligence Analytics Engine", version="3.0.0")
+
+# Create static directories for media uploads on Render writable directory
+os.makedirs("/app/static/uploads", exist_ok=True)
+app.mount("/static", StaticFiles(directory="/app/static"), name="static")
 
 # Map COCO classes to retail objects
 RETAIL_CLASSES = {
@@ -43,6 +50,14 @@ def seconds_to_stamp(seconds: float) -> str:
     return f"{seconds // 60:02d}:{seconds % 60:02d}"
 
 def normalize_media_path(path: str) -> str:
+    if path.startswith("http://") or path.startswith("https://"):
+        if "/static/uploads/" in path:
+            filename = path.split("/static/uploads/")[-1]
+            local_path = f"/app/static/uploads/{filename}"
+            if os.path.exists(local_path):
+                return local_path
+        return path
+
     p = Path(path)
     if p.exists():
         return str(p)
@@ -231,6 +246,21 @@ def health():
         "model": "YOLOv8 custom retail customer tracking pipeline",
         "classes": list(RETAIL_CLASSES.values()),
         "status": "online"
+    }
+
+@app.post("/upload")
+async def upload_media(file: UploadFile = File(...)):
+    os.makedirs("/app/static/uploads", exist_ok=True)
+    safe_name = f"{int(time.time())}_{file.filename.replace(' ', '_')}"
+    dest_path = f"/app/static/uploads/{safe_name}"
+    
+    with open(dest_path, "wb") as buffer:
+        content = await file.read()
+        buffer.write(content)
+        
+    return {
+        "ok": True,
+        "url": f"/static/uploads/{safe_name}"
     }
 
 @app.post("/analyze")
